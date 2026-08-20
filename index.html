@@ -108,7 +108,10 @@ function render(){
  for(const t of ["main","junior"]){
   const el=document.getElementById(t+"Records");
   if(!data[t].length){el.innerHTML='<p class="empty">Belum ada rekod.</p>';continue}
-  el.innerHTML=data[t].slice().reverse().map(r=>'<div class="record"><b>'+esc(r.event || r.name || '')+'</b><small>'+esc(r.date)+' • '+esc(r.result)+'</small>'+(r.notes?'<div>'+esc(r.notes)+'</div>':'')+'</div>').join('');
+  el.innerHTML=data[t].slice().reverse().map((r,i)=>{
+  const realIndex=data[t].length-1-i;
+  return '<div class="record"><b>'+esc(r.event || "")+'</b><small>'+esc(r.date || "")+' • '+esc(r.result || "")+'</small>'+(r.notes?'<div>'+esc(r.notes)+'</div>':'')+'<button type="button" class="delete-record" onclick="deleteRecord(\''+t+'\','+realIndex+')">🗑️ PADAM</button></div>';
+}).join('');
  }
 }
 date.value=new Date().toISOString().slice(0,10);
@@ -129,7 +132,14 @@ recordForm.addEventListener("submit",e=>{
  dateInput.value=new Date().toISOString().slice(0,10);
  render();
 });
-render();
+function deleteRecord(teamName,index){
+  if(confirm("Padam rekod ini?")){
+    data[teamName].splice(index,1);
+    localStorage.setItem(KEY,JSON.stringify(data));
+    render();
+  }
+ }
+ render();
 </script>
 </body>
 </html>
