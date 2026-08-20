@@ -112,13 +112,27 @@ el.innerHTML=data[t].slice().reverse().map(r=>'<div class="record"><b>'+esc(r.ev
 }
 date.value=new Date().toISOString().slice(0,10);
 recordForm.addEventListener("submit",e=>{
- e.preventDefault();
- const t=team.value;
- data[t].push({date:date.value,event:event.value,result:result.value,notes:notes.value});
- localStorage.setItem(KEY,JSON.stringify(data));
- e.target.reset(); date.value=new Date().toISOString().slice(0,10); render();
+  e.preventDefault();
+
+  const t=document.getElementById("team").value;
+  const d=document.getElementById("date").value;
+  const ev=document.getElementById("event").value;
+  const res=document.getElementById("result").value;
+  const n=document.getElementById("notes").value;
+
+  data[t].push({
+    date:d,
+    event:ev,
+    result:res,
+    notes:n
+  });
+
+  localStorage.setItem(KEY,JSON.stringify(data));
+
+  e.target.reset();
+  document.getElementById("date").value=new Date().toISOString().slice(0,10);
+  render();
 });
-render();
 </script>
 </body>
 </html>
